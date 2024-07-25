@@ -1,7 +1,7 @@
 humanpath <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/human.txt"
 line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000001405.40_GRCh38.p14_rm.out"
 
-
+####鼠
 mouse <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/mouse.txt"
 line1path<- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000001635.27_GRCm39_rm.out"
 
