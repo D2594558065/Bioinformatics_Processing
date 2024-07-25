@@ -1,0 +1,160 @@
+humanpath <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/human.txt"
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000001405.40_GRCh38.p14_rm.out"
+
+
+mouse <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/mouse.txt"
+line1path<- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000001635.27_GRCm39_rm.out"
+
+###抹香鲸
+spermpath <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/spermWhale.txt"
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_002837175.3.repeatMasker.out"
+
+result_sperm <- calculate_line1_density(spermpath, line1path_sperm)
+
+#####小抹香鲸
+pygmypath <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/pygmyWhale.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_026419965.1.repeatMasker.out"
+
+result_pygmy <- calculate_line1_density(pygmypath, line1path_pygmy)
+
+###########黑猩猩
+chimpanzeepath <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/chimpanzee.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_028858775.1.repeatMasker.out"
+
+###############牛
+Bos_tauruspath <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Bos_taurus.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_002263795.3.repeatMasker.out"
+
+#####羊
+Ovis_ariespath <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Ovis_aries.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_016772045.2.repeatMasker.out"
+
+######猪
+pig_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/pig.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000003025.6.repeatMasker.out"
+
+######挪威鼠 大鼠
+Rattus_norvegicus_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Rattus_norvegicus.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_036323735.1.repeatMasker.out"
+
+###########猫
+cat_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/cat.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_018350175.1.repeatMasker.out"
+
+######狗
+dog_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/dog.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_014441545.1.repeatMasker.out"
+
+###兔子
+rabit_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/rabbit.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_009806435.1.repeatMasker.out"
+
+#######大猩猩
+Gorillas_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Gorilla.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_029281585.2.repeatMasker.out"
+
+#######大象
+elephant_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/elephant.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_030014295.1.repeatMasker.out"
+
+
+#######蝙蝠
+Megabat_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Megabat.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000151845.1.repeatMasker.out"
+
+#####红猩猩
+Orangutan_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Orangutan.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_028885655.2.repeatMasker.out"
+
+#####长臂猿
+Gibbon_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Gibbon.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_006542625.1.repeatMasker.out"
+
+########食蟹猕猴
+Crab_eating_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Crab-eating.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_037993035.1.repeatMasker.out"
+
+#######普通猕猴
+Rhesus_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Rhesus.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_003339765.1.repeatMasker.out"
+
+#####白耳绒猴
+Marmoset_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Marmoset.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_011100555.1.repeatMasker.out"
+
+#####眼镜猴
+Tarsier_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Tarsier.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000164805.1.repeatMasker.out"
+
+######鼠狐猴
+Mouse_lemur_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Mouse_lemur.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000165445.2.repeatMasker.out"
+
+
+#####婴猴
+Bushbaby_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Bushbaby.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000181295.1.repeatMasker.out"
+
+
+######松鼠
+Squirrel_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Squirrel.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_016881025.1.repeatMasker.out"
+
+#####田鼠
+Prairie_vole_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Prairie_vole.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000317375.1.repeatMasker.out"
+
+#####豚鼠
+Guinea_pig_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Guinea_pig.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_034190915.1.repeatMasker.out"
+
+##########北美鼠兔
+Pika_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Pika.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_030435755.1.repeatMasker.out"
+
+
+####小棕蝠
+Microbat_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Microbat.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000147115.1.repeatMasker.out"
+
+#######马
+horse_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/horse.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_002863925.1.repeatMasker.out"
+
+#####羊驼
+Alpaca_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/Alpaca.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_000164845.3.repeatMasker.out"
+
+#####虎鲸
+killer_whale_path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/rawdata/killer_whale.txt"
+
+line1path <- "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/GCF_937001465.1.repeatMasker.out"
+
+
