@@ -1,3 +1,16 @@
+###普通的热图
+p1 <- pheatmap(data, 
+         scale  = "row",
+         color = colorRampPalette(c("blue", "white", "red"))(50), 
+         main = "Gene Expression Heatmap",
+         cluster_rows = TRUE,
+         cluster_cols = FALSE)
+
+
+
+
+
+
 p1 <- Heatmap(cor_matrix, 
         name = "mat", 
         col = col_fun,  # 应用颜色函数
