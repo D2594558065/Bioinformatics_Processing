@@ -1,0 +1,3 @@
+##########STAR索引
+####小鼠  GRCm39
+/home/mnt1/wanghao/project/index/STAR/mouse_index
