@@ -70,8 +70,10 @@ p <- ggplot() +
        x = paste("PC1: ", explained_var[1], "% variance"),
        y = paste("PC2: ", explained_var[2], "% variance")) +
   theme_minimal() +
-  theme(panel.border = element_blank(), panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(), panel.background = element_rect(fill = "white", colour = NA)) +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 1),  # 添加黑色边框
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "white", colour = NA)) +
   scale_color_brewer(palette = "Set1")  # 使用预设颜色板来区分不同的类别
 
 ggsave(filename = "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/RNA_seq/plot/TE_PCA.pdf", plot = p, device = "pdf", width = 8, height = 8)
