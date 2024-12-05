@@ -5,3 +5,7 @@
 /home/mnt1/wanghao/project/GRCm38_index/BisMark_lambda/
 #####抹香鲸WGBS bismark index
 /home/mnt1/wanghao/project/index/BisMark/sperm
+
+####Salmon索引 转录本
+##裸鼹鼠 GCF_000247695.1_HetGla_female_1.0
+/home/mnt1/wanghao/project/index/Salmon/NMR_index
