@@ -1,2 +1,5 @@
 ####小抹香鲸蛋白编码文件
 /home/mnt1/wanghao/project/Whale_IPS/IPS/IPS_PCA/pluripotency/gtf/pygmy_protein_coding_gene_names.txt
+
+####小鼠蛋白编码基因文件
+/home/mnt1/wanghao/project/Whale_IPS/IPS/IPS_PCA/pluripotency/gtf/mouse_protein_coding_gene_names.txt
