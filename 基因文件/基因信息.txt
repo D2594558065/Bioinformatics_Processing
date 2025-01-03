@@ -1,2 +1,4 @@
 #####各胚层的maker基因，高老师版
 /home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/germ_layer_maker.txt
+#####inflammatory response 基因https://www.informatics.jax.org/go/term/GO:0006954
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/inflammatory_response.csv
