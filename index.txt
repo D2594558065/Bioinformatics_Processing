@@ -1,6 +1,8 @@
 ##########STAR索引
 ####小鼠  GRCm39
 /home/mnt1/wanghao/project/index/STAR/mouse_index
+###小鼠 GRcm38
+/home/mnt1/wanghao/project/index/STAR/CRcm38_mouse
 ### 噬菌体 WGBS bismark index 比对到噬菌体基因组上是为了计算转化率
 /home/mnt1/wanghao/project/GRCm38_index/BisMark_lambda/
 #####抹香鲸WGBS bismark index
