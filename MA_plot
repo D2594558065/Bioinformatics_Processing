@@ -1,0 +1,255 @@
+####进行MAplot的绘制
+library(dplyr)
+library(stringr)
+
+setwd('/home/mnt1/wanghao/project/Whale_IPS/IPS/Pygmy_sperm_whale/IPSC/matrix/')
+#####OISD0天
+
+three_rep1 <- read.table('WMZ-0722-9_S2_L003.count',header = T)
+three_rep1 <- three_rep1 %>%
+  rename("..WMZ.0722.9_S2_L003Aligned.sortedByCoord.out.bam" = 'count') 
+three_rep2 <- read.table('WMZ-0722-10_S3_L003.count',header = T)
+three_rep2 <- three_rep2 %>%
+  rename("..WMZ.0722.10_S3_L003Aligned.sortedByCoord.out.bam" = 'count')  
+
+
+four_rep1 <- read.table('WMZ-0722-11_S4_L003.count',header = T)
+four_rep1 <- four_rep1 %>%
+  rename("..WMZ.0722.11_S4_L003Aligned.sortedByCoord.out.bam" = 'count')  
+
+four_rep2 <- read.table('WMZ-0722-12_S20_L001.count',header = T)
+four_rep2 <- four_rep2 %>%
+  rename("..WMZ.0722.12_S20_L001Aligned.sortedByCoord.out.bam" = 'count')  
+
+six_rep1 <- read.table('WMZ-0722-13_S5_L003.count',header = T)
+six_rep1 <- six_rep1 %>%
+  rename("..WMZ.0722.13_S5_L003Aligned.sortedByCoord.out.bam" = 'count')  
+
+six_rep2 <- read.table('WMZ-0722-14_S6_L003.count',header = T)
+six_rep2 <- six_rep2 %>%
+  rename("..WMZ.0722.14_S6_L003Aligned.sortedByCoord.out.bam" = 'count')  
+
+fibro_rep1 <- read.table('WMZ-0821-1_S15_L002.count',header = T)
+fibro_rep1 <- fibro_rep1 %>%
+  rename("..WMZ.0821.1_S15_L002Aligned.sortedByCoord.out.bam" = 'count')  
+
+fibro_rep2 <- read.table('WMZ-0821-2_S13_L002.count',header = T)
+fibro_rep2 <- fibro_rep2 %>%
+  rename("..WMZ.0821.2_S13_L002Aligned.sortedByCoord.out.bam" = 'count')  
+
+###进行差异基因的表达分析
+library(DESeq2)
+
+control1 <- fibro_rep1  %>% 
+    select(Geneid,count)  %>% 
+    rename('count' = 'contro1')
+control2 <- fibro_rep2  %>% 
+    select(Geneid,count) %>% 
+    rename('count' = 'contro2')
+
+treat1 <- three_rep1  %>% 
+    select(Geneid,count) %>% 
+    rename('count' = 'treat1')
+treat2 <- three_rep2  %>% 
+    select(Geneid,count) %>% 
+    rename('count' = 'treat2')
+
+df <- merge(merge(merge(control1,control2,by = 'Geneid'),treat1,by = 'Geneid'),treat2,by = 'Geneid')
+
+rownames(df) <- df$Geneid
+df <- df[,-1]
+
+coldata <- data.frame(condition = factor(rep(c('control', 'treat'), each = 2), levels = c('control', 'treat')))
+
+#第一步，构建 DESeqDataSet 对象
+dds <- DESeqDataSetFromMatrix(countData = df, colData = coldata, design= ~condition)
+dds1 <- DESeq(dds)
+res <- results(dds1,contrast = c('condition','treat','control'))
+plotMA(res)
+
+library(ggplot2)
+
+# 将DESeq2的结果对象转换为DataFrame
+result_df <- as.data.frame(res)
+result_df$gene <- rownames(result_df)
+
+
+# 创建MA图
+library(dplyr)
+
+# 在result_df中创建一个新列，用于指示颜色
+result_df <- result_df %>%
+  mutate(color_indicator = ifelse(log2FoldChange >= 1 & padj <= 0.05, "blue",
+                        ifelse(log2FoldChange <= -1 & padj <= 0.05, "red", "gray")))
+# 加载必要的库
+library(ggrepel)
+
+# 定义色盲友好的蓝、红、灰色
+color_blind_friendly_blue <- "#377EB8"
+color_blind_friendly_red  <- "#E41A1C"
+color_blind_friendly_gray <- "#999999"
+
+# 需要标记的基因列表
+genes_to_label <- c("KIF17", "ESSRB", "DNMT3L", "SOX11", "TFE3", "PRDM1", "KLF4", "DPPA5", "PRDM14", "LIN28A", "OCT4", "ZIC2", "NANOG", "TFCP2L1", "ZIC3", "DPPA4", "SOX2", "DNMT3A", "OTX2", "EOMES", "DUSP6", "ZFP42", "DPPA2", "DNMT3B")
+
+ma_plot <- ggplot(result_df, aes(x = log2(baseMean), y = log2FoldChange, color = color_indicator)) +
+  geom_point(size = 2, alpha = 0.5) +
+  scale_color_manual(values = c("blue" = color_blind_friendly_blue, "gray" = color_blind_friendly_gray, "red" = color_blind_friendly_red), guide = FALSE) +
+  geom_hline(yintercept = c(1, -1), linetype = "dotted", color = "gray") +
+  
+  # 绘制特定基因的点，根据color_indicator设置颜色
+  geom_point(data = subset(result_df, gene %in% genes_to_label), aes(x = log2(baseMean), y = log2FoldChange, fill = color_indicator), color = "black", size = 2.5, shape = 21) +
+  scale_fill_manual(values = c("blue" = color_blind_friendly_blue, "gray" = color_blind_friendly_gray, "red" = color_blind_friendly_red)) +
+  
+  # 设置标签为黑体加粗
+  geom_text_repel(data = subset(result_df, gene %in% genes_to_label), aes(label = gene), box.padding = 0.5, point.padding = 0.5, segment.size = 0.2, size = 5, color = "black", fontface = "bold") +
+  
+  labs(x = "Log2 Mean Abundance",
+       y = "Log2 Fold Change",
+       title = "MA Plot") +
+  theme_minimal() +
+  
+  # 优化图形的外观
+  theme(
+    axis.title = element_text(color = "black"),
+    axis.text = element_text(color = "black"),
+    axis.line = element_line(color = "black"),
+    legend.position = "none"
+  )
+
+# 显示MA图
+print(ma_plot)
+
+
+result_df[which(result_df$gene == 'ZFP42'),]
+
+
+####倾斜MA plot
+# 加载必要的库
+library(ggrepel)
+
+# 定义色盲友好的蓝、红、灰色
+color_blind_friendly_blue <- "#377EB8"
+color_blind_friendly_red  <- "#E41A1C"
+color_blind_friendly_gray <- "#999999"
+
+baseA <- counts(dds1, normalized=T)[, dds1$condition=="control"]
+
+if (is.vector(baseA)){
+  baseMeanA <- as.data.frame(baseA)
+} else {
+  baseMeanA <- as.data.frame(rowMeans(baseA))
+}
+colnames(baseMeanA) <- "control"
+head(baseMeanA)
+
+
+baseB <- counts(dds1, normalized=T)[, dds1$condition=="treat"]
+
+if (is.vector(baseB)){
+  baseMeanB <- as.data.frame(baseB)
+} else {
+  baseMeanB <- as.data.frame(rowMeans(baseB))
+}
+colnames(baseMeanB) <- "treat"
+head(baseMeanB)
+
+baseMeanA$gene <- rownames(baseMeanA)
+baseMeanB$gene <- rownames(baseMeanB)
+
+drawdata <- baseMeanA  %>% 
+    inner_join(baseMeanB,by = 'gene') %>%
+    inner_join(result_df,by = 'gene')
+
+
+
+# drawdata$control<- log2(drawdata$control+0.1)#对平均值进行标准化
+# drawdata$treat<- log2(drawdata$treat+0.1)#对平均值进行标准化
+drawdata$level <- ifelse(drawdata$padj<0.05, 
+                         ifelse(drawdata$log2FoldChange>=1, "Up", 
+                                ifelse(drawdata$log2FoldChange<=-1, "Down", "NoSig")),"NoSig")#标记差异基因
+head(drawdata)
+
+# 需要标记的基因列表
+genes_to_label <- c("KIF17", "ESSRB", "DNMT3L", "SOX11", "TFE3", "PRDM1", "KLF4", "DPPA5", "PRDM14", "LIN28A", 
+"TP53","ZIC2", "NANOG", "TFCP2L1", "ZIC3", "DPPA4", "SOX2", "DNMT3A", "OTX2", "EOMES", "DUSP6",
+ "ZFP42", "DPPA2", "DNMT3B","GDF3","SLC2A3","CRIPTO","FGF4","POU5F1","FUT4")
+
+
+
+library(ggplot2)
+library(grDevices)  # 调用adjustcolor函数
+
+# 定义原始颜色和稍深的颜色
+original_colors <- c("NoSig" = "grey", "Up" = "firebrick", "Down" = "dodgerblue")
+darker_colors <- c("NoSig" = adjustcolor("grey", 0.7), "Up" = adjustcolor("firebrick", 0.7), "Down" = adjustcolor("dodgerblue", 0.7))
+
+# 使用ggplot2创建图形
+p <- ggplot(drawdata, aes(x = log2(control), y = log2(treat), color = level)) +
+  geom_point(size = 3, aes(fill = level), shape = 21) +  # 使用shape=21来允许填充颜色
+  scale_color_manual(values = original_colors) +
+  scale_fill_manual(values = original_colors) +
+
+  coord_fixed(ratio = 1) +
+
+  # 绘制特定基因的点，使用深色填充和黑色边框
+  geom_point(data = subset(drawdata, gene %in% genes_to_label), aes(x = log2(control), y = log2(treat), fill = level), color = "black", size = 2.5, shape = 21) +
+  scale_fill_manual(values = darker_colors) +
+
+  # 设置标签为黑体加粗
+  geom_text_repel(data = subset(drawdata, gene %in% genes_to_label), aes(label = gene), box.padding = 0.5, point.padding = 0.5, segment.size = 0.2, size = 5, color = "black", fontface = "bold") +
+
+  labs(title = "RNA-seq", x = "Log2(pygmy embryonic skin fibro mean expression)", y = "Log2(pygmy embryonic skin fibro-wipsc mean expression)") +
+  theme_minimal() +
+
+  # 使坐标轴、坐标轴标签和标题都为黑体加粗
+  theme(
+    axis.title = element_text(color = "black", face = "bold"),
+    axis.text = element_text(color = "black", face = "bold"),
+    axis.line = element_line(color = "black"),
+    plot.title = element_text(face = "bold")
+  )
+
+# 显示图形
+print(p)
+
+###存图片
+# 保存图形
+ggsave(filename = "/home/mnt1/wanghao/project/Whale_IPS/IPS/Pygmy_sperm_whale/IPSC/plotfile/fibro_wipsc_3_MA.pdf", plot = p, width = 10, height = 10, dpi = 300)
+
+
+drawdata[which(drawdata$gene == 'MYC'),]
+
+
+
+######################替换标签的图
+# 使用ggplot2创建图形
+p <- ggplot(drawdata, aes(x = log2(control), y = log2(treat), color = level)) +
+  geom_point(size = 3, aes(fill = level), shape = 21) +  # 使用shape=21来允许填充颜色
+  scale_color_manual(values = original_colors) +
+  scale_fill_manual(values = original_colors) +
+
+  coord_fixed(ratio = 1) +
+
+  # 绘制特定基因的点，使用深色填充和黑色边框
+  geom_point(data = subset(drawdata, gene %in% genes_to_label), aes(x = log2(control), y = log2(treat), fill = level), color = "black", size = 2.5, shape = 21) +
+  scale_fill_manual(values = darker_colors) +
+
+  # 设置标签为黑体加粗，并将POU5F1替换为OCT3/4
+  geom_text_repel(data = subset(drawdata, gene %in% genes_to_label), 
+                  aes(label = ifelse(gene == "POU5F1", "OCT3/4", gene)), 
+                  box.padding = 0.5, point.padding = 0.5, segment.size = 0.2, size = 5, color = "black", fontface = "bold") +
+
+  labs(title = "RNA-seq", x = "Log2(pygmy embryonic skin fibro mean expression)", y = "Log2(pygmy embryonic skin fibro-wipsc mean expression)") +
+  theme_minimal() +
+
+  # 使坐标轴、坐标轴标签和标题都为黑体加粗
+  theme(
+    axis.title = element_text(color = "black", face = "bold"),
+    axis.text = element_text(color = "black", face = "bold"),
+    axis.line = element_line(color = "black"),
+    plot.title = element_text(face = "bold")
+  )
+
+# 显示图形
+print(p)
