@@ -1,0 +1,3 @@
+###小鼠SASP 基因集 SAUL_SEN_MAYO.txt  https://www.gsea-msigdb.org/gsea/msigdb/mouse/geneset/SAUL_SEN_MAYO.html
+##来源自文章A new gene set identifies senescent cells and predicts senescence-associated pathways across tissues
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息
