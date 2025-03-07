@@ -4,3 +4,6 @@
 
 ####小鼠agingclock gene  源自Aging Fly Cell Atlas identifies exhaustive aging features at cellular resolution
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/mouse_aging_clock.txt
+
+
+####小鼠集衰老肝细胞基因特征 （AHGS）AHGS_Aging_gene  源自Aging promotes metabolic dysfunction-associated steatotic liver disease by inducing ferroptotic stress
