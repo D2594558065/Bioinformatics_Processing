@@ -7,3 +7,7 @@
 
 
 ####小鼠集衰老肝细胞基因特征 （AHGS）AHGS_Aging_gene  源自Aging promotes metabolic dysfunction-associated steatotic liver disease by inducing ferroptotic stress
+
+
+####氨基酸的向量表示VHSEB8
+/home/mnt1/wanghao/project/help/鲸关键序列比较/rawgenefasta/VHSE8.txt
