@@ -11,3 +11,6 @@
 
 ####氨基酸的向量表示VHSEB8
 /home/mnt1/wanghao/project/help/鲸关键序列比较/rawgenefasta/VHSE8.txt
+
+####人类基因表达的表观遗传调控  来源自https://www.gsea-msigdb.org/gsea/msigdb/cards/REACTOME_EPIGENETIC_REGULATION_OF_GENE_EXPRESSION
+vim /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/REACTOME_EPIGENETIC_REGULATION_OF_GENE_EXPRESSION.txt
