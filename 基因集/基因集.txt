@@ -14,3 +14,7 @@
 
 ####人类基因表达的表观遗传调控  来源自https://www.gsea-msigdb.org/gsea/msigdb/cards/REACTOME_EPIGENETIC_REGULATION_OF_GENE_EXPRESSION
 vim /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/REACTOME_EPIGENETIC_REGULATION_OF_GENE_EXPRESSION.txt
+
+
+#####人类GRCH38 基因位置的bed文件
+/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/OR_histone_modification/rawdata/SV_data/rawdata/1000genoe/gencode.v47.annotation.bed
