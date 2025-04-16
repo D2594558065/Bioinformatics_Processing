@@ -3,3 +3,7 @@
 
 ####小鼠蛋白编码基因文件
 /home/mnt1/wanghao/project/Whale_IPS/IPS/IPS_PCA/pluripotency/gtf/mouse_protein_coding_gene_names.txt
+
+####小鼠蛋白编码基因文件包括描述
+##在D:\Desktop\任务结果\啮齿类动物受体数据分析\流程.txt脚本里生成
+/home/mnt1/wanghao/project/ReceptorProject/supplement/mouse_genes.bed
