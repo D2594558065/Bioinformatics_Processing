@@ -1,0 +1,118 @@
+library(scales)
+library(ggsankey)
+
+biological_processes <- c(
+  "aging", "wound healing", "response to oxidative stress", "cellular response to chemical stress",
+  "response to X-ray", "establishment of tissue polarity", "organ growth", "mesoderm development",
+  "heart morphogenesis", "muscle cell differentiation", "regulation of fat cell differentiation",
+  "lipid catabolic process", "ossification", "fibroblast activation", "neuroinflammatory response"
+)
+
+
+go_enrichment_simplified  <- as.data.frame(go_enrichment_simplified )
+
+drawdata <- go_enrichment_simplified[go_enrichment_simplified$Description %in% biological_processes,]  %>% 
+  filter(Cluster == "HvsL")
+
+# 准备数据：只选出需要的列，并转换为sankey格式
+
+
+nodes <- data.frame(name = unique(c(as.character(drawdata$Cluster), as.character(drawdata$Description))))
+
+# 创建 links 数据框，定义每个连接，来源是 Cluster，目标是 Description
+links <- data.frame(
+  source = match(drawdata$Cluster, nodes$name) - 1,  # 减去 1 以匹配 0 索引
+  target = match(drawdata$Description, nodes$name) - 1,
+  value = -log10(drawdata$p.adjust)  # 设置每个连接的流量值，视为1个单位
+  # value = drawdata$p.adjust
+  
+)
+
+library(networkD3)
+
+# 假设你已经有 links 和 nodes 数据：
+
+# 步骤 1：创建连续颜色（从 skyblue 到 firebrick）
+n_bins <- 10
+palette_func <- colorRampPalette(c("skyblue", "#306AA3"))
+color_vec <- palette_func(n_bins)
+
+# 步骤 2：按 value 分箱（bin），添加 group 列
+links$bin <- cut(links$value, breaks = n_bins, labels = paste0("g", 1:n_bins))
+links$group <- links$bin
+
+# 步骤 3：生成 colourScale 的 D3 映射代码
+color_scale <- paste0(
+  "d3.scaleOrdinal().domain([", 
+  paste0('"', levels(links$group), '"', collapse = ", "), 
+  "]).range([", 
+  paste0('"', color_vec, '"', collapse = ", "), 
+  "])"
+)
+
+# 步骤 4：为 nodes 添加 group 信息（使其与对应 links 的 target 一致）
+nodes$group <- NA
+nodes$group[links$target + 1] <- as.character(links$group)  # +1 因为 R 索引从 1 开始
+
+# 可选：为没有 group 的节点设置默认颜色组（比如 g1）
+nodes$group[is.na(nodes$group)] <- "g1"
+
+
+# 步骤 5：绘制 Sankey 图
+sankey<- sankeyNetwork(
+  Links = links,
+  Nodes = nodes,
+  Source = "source", 
+  Target = "target",
+  Value = "value", 
+  NodeID = "name",
+  LinkGroup = "group",    # 连线颜色分组
+  NodeGroup = "group",    # 节点颜色分组
+  colourScale = color_scale,
+  fontSize = 4, 
+  nodeWidth = 30,
+  width = 170,
+  height = 290
+)
+
+
+
+# 假设你的桑基图已经创建好了并保存在 sankey 变量中
+saveWidget(sankey, "/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/sankey_plot.html")
+
+
+
+
+
+
+
+library(ggplot2)
+
+# 创建颜色调色板（10种颜色）
+palette_func <- colorRampPalette(c("skyblue", "#306AA3"))
+color_vec <- palette_func(10)
+
+# 构建数据框：每一格代表一个bin
+legend_df <- data.frame(
+  x = 1:10,
+  label = 1:10,
+  color = color_vec
+)
+
+# 绘制连续色条图例
+p <- ggplot(legend_df, aes(x = x, y = 1, fill = color)) +
+  geom_tile(width = 1, height = 0.4) +
+  scale_fill_identity() +
+  scale_x_continuous(breaks = legend_df$x, labels = legend_df$label) +
+  theme_void() +
+  theme(
+    axis.text.x = element_text(size = 12),
+    plot.margin = margin(10, 10, 10, 10),
+    plot.title = element_text(hjust = 0.5)
+  ) +
+  ggtitle("−log10(p.adjust)")
+
+  
+ggsave(filename = "/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/lengend_sankey.pdf", plot = p, device = "pdf", width = 3, height = 2)
+
+
