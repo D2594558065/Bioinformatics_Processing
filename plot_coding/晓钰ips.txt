@@ -1,0 +1,158 @@
+write.table(genes_to_label[,c(8,2)],
+            file = "/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/edges_LogFc.tsv",
+            sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
+
+########绘制散点图
+drawdata <- df_total  %>% 
+  inner_join(genes_to_label[,c(8,2)],by=c("to" = "SYMBOL"))
+# write.table(drawdata,
+#             file = "/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/WGBS_RNA_function_plot.tsv",
+#             sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
+
+#WGBS_RNA_function_plot.tsv手动对文件进行清理之后再绘图
+drawdata <- read.csv("/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/WGBS_RNA_function_plot.tsv",sep ="\t",header = TRUE)%>%
+  filter(TYPE != "")
+library(ggplot2)
+library(dplyr)
+library(stringr)
+
+# 假设你的 drawdata 已经是完整的 from × to 组合（可以参考上一个回答）
+
+# 自动换行 Y 轴标签
+drawdata$from <- str_wrap(drawdata$from, width = 25)
+
+# 绘图
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(tidyr)
+
+# 确保 drawdata 是所有 from × to 的组合
+drawdata_full <- expand_grid(
+  from = unique(drawdata$from),
+  to = unique(drawdata$to)
+) %>%
+  left_join(drawdata, by = c("from", "to"))
+to_order <- drawdata_full %>%
+  filter(!is.na(log2FoldChange)) %>%
+  group_by(to) %>%
+  summarise(n = n()) %>%  # 用默认的列名 n，避免 name 参数冲突
+  arrange(desc(n)) %>%
+  pull(to)
+
+# 按 Y轴 通路命中基因数量排序
+from_order <- drawdata_full %>%
+  filter(!is.na(log2FoldChange)) %>%
+  group_by(from) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n)) %>%
+  pull(from)
+
+# 设置 factor 顺序
+drawdata_full$to <- factor(drawdata_full$to, levels = to_order)
+drawdata_full$from <- factor(drawdata_full$from, levels = from_order)
+
+# 如果 from 太长，可换行
+drawdata_full$from <- str_wrap(drawdata_full$from, width = 25)
+
+custom_colors <- c(
+  "Other " = "#56B4E9",  # 灰色 - 中性
+  "Other developmental and somatic genes" = "#E69F00",  # 橙色
+  "Muscle/Heart" = "red",  # 蓝色
+  "Lipids" = "#009E73"  # 绿色
+)
+
+# 绘图
+p <- ggplot(drawdata_full, aes(x = to, y = from)) +
+  # 背景格子：画出所有组合的 tile 边框
+  geom_tile(fill = NA, color = "#4D4D4D", width = 1, height = 1) +
+  
+  # 有数据时画点（不带 tile）
+  geom_point(
+    data = filter(drawdata_full, !is.na(log2FoldChange)),
+    aes(size = log2FoldChange, fill = TYPE),
+    shape = 21, color = "black", stroke = 0.2
+  ) +
+  
+  scale_size_continuous(range = c(1, 4)) +
+  scale_fill_manual(values = custom_colors,guide = guide_legend(nrow = 3)) +
+  
+  theme_minimal() +
+ theme(
+  axis.text.x = element_text(angle = 45, hjust = 1, size = 5),
+  axis.text.y = element_text(size = 4),
+  axis.title = element_blank(),
+  panel.grid = element_blank(),
+  legend.text = element_text(size = 4),
+  legend.title = element_text(size = 6),
+  legend.position = "bottom",            # 图例位置改为底部
+  legend.box = "horizontal"              # 图例水平排列
+)
+
+
+ggsave(filename = "/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/RNA_WGS_gene_function.pdf", plot = p, device = "pdf", width = 5, height = 6)
+###new plot
+library(ggplot2)
+library(dplyr)
+
+# 计算每个通路的基因数量，并为每个基因分配 X 轴位置
+drawdata_unique <- drawdata_full %>%
+  distinct(from, to, .keep_all = TRUE)
+plot_data <- drawdata_unique %>%
+  filter(!is.na(log2FoldChange)) %>%
+  group_by(from) %>%
+  mutate(
+    gene_index = row_number() - 1  # 给每个基因分配一个索引，从0开始
+  ) %>%
+  ungroup()
+
+# 创建背景网格的坐标数据
+plot_data_full <- expand.grid(
+  gene_index = unique(plot_data$gene_index),
+  from = unique(plot_data$from)
+)
+
+from_order <- plot_data %>%
+  distinct(from, TYPE) %>%
+  arrange(TYPE, from) %>%
+  distinct(from, .keep_all = TRUE) %>%  # 确保 from 唯一
+  pull(from)
+plot_data$from <- factor(plot_data$from, levels = from_order)
+plot_data_full$from <- factor(plot_data_full$from, levels = from_order)
+
+# 绘图
+p <- ggplot() +
+  # 绘制背景网格
+  geom_tile(data = plot_data_full, aes(x = gene_index, y = from), fill = "white", color = "#4D4D4D", width = 1, height = 1) +
+
+  # 数据点，使用 gene_index 作为 X 轴位置
+  geom_point(
+    data = plot_data,
+    aes(x = gene_index, y = from, fill = TYPE, size = log2FoldChange),
+    shape = 21, color = "black", stroke = 0.2
+  ) +
+
+  # 添加基因名标注
+  geom_text(data = plot_data, aes(x = gene_index, y = from, label = to), hjust = -0.5, size = 1.5) +
+
+  # 设置大小和颜色
+  scale_size_continuous(range = c(1, 4)) +
+  scale_fill_manual(values = custom_colors, guide = guide_legend(nrow = 3)) +
+
+  # 设置主题
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 4),
+    axis.text.x = element_text(size = 5),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    legend.text = element_text(size = 4),
+    legend.title = element_text(size = 6),
+    legend.position = "bottom",
+    legend.box = "horizontal"
+  )
+
+# 保存图像
+ggsave(filename = "/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/RNA_WGS_gene_function2_binned_with_grid_gene_count_2.pdf",
+       plot = p, device = "pdf", width = 5, height = 6)
+
