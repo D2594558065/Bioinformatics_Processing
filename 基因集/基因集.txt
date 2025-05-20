@@ -18,3 +18,7 @@ vim /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/REACTOME_EPIGENETIC_
 
 #####人类GRCH38 基因位置的bed文件
 /home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/OR_histone_modification/rawdata/SV_data/rawdata/1000genoe/gencode.v47.annotation.bed
+
+
+
+######啮齿类动物的MLS基因(按照文章中的定义为 相关性绝对值大于0.4  p值小于0.05   分为Neg-MLS Pos-MLS 基因集 )
