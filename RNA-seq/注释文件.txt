@@ -1,5 +1,5 @@
 #######生成小鼠的ensemble号与SYMBOL的映射
-###文件存为/home/mnt1/wanghao/project/gtf 文件夹下
+###文件存为/home/mnt1/wanghao/project/gtf/gene_annotation.bed 文件夹下
 awk '$3 == "gene" {
     match($0, /gene_id "[^"]+"/, a);
     match($0, /gene_name "[^"]+"/, b);
