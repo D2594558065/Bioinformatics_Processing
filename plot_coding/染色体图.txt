@@ -1,0 +1,18 @@
+library(RIdeogram)
+mouse_karyotype <- read.table("/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/mm10_karyotype.txt",header=TRUE,sep ="\t")
+drawdata <- output  %>% 
+  filter(abs(meth.diff)>=25 & qvalue <= 0.05 )  %>% 
+  select(seqnames,start,end,meth.diff)
+drawdata$meth.diff <- abs(drawdata$meth.diff)
+colnames(drawdata) <- c("Chr","Start","End","Value")
+# drawdata$Type <- "DMR"
+# drawdata$Shape <- "box"
+# drawdata$color <- "6a3d9a"
+# drawdata <- drawdata %>%
+#   select(Type,Shape,seqnames,start,end,color)
+
+output_svg <- "/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/chromosome.png"
+svg(filename = output_svg, width = 8, height = 4)  # 自定义尺寸
+ideogram(karyotype = mouse_karyotype,overlaid = drawdata,output = output_svg,width = 170)
+setwd("/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/plot/")
+svg2pdf(output_svg)
