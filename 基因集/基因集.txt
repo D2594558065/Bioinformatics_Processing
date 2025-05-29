@@ -28,3 +28,11 @@ vim /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/REACTOME_EPIGENETIC_
 
 #####CoreScence  核心衰老基因集 人鼠通用Single-cell and spatial detection of senescent cells using DeepScence 文章
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/CoreScence.txt
+
+
+######Sensig 基因集 是在小鼠体内的衰老特征(也可用于人) 筛选标准是padj<=0.05 1803个基因
+###Transfer learning in a biomaterial fibrosis model identifies in vivo senescence heterogeneity and contributions 
+to vascularization and matrix production across species and diverse pathologies来源自这篇文章
+
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/11357_2023_785_MOESM2_ESM (1).csv
+
