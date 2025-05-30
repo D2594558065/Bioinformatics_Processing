@@ -38,3 +38,6 @@ to vascularization and matrix production across species and diverse pathologies�
 
 ######DNA 损伤修复相关基因集
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/DNA修复基因.txt
+
+####同源重组的筛选结果 存为
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/GenomeRNAi_v17_GR00236-A-1.txt
