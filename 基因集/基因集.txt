@@ -36,3 +36,5 @@ to vascularization and matrix production across species and diverse pathologies�
 
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/11357_2023_785_MOESM2_ESM (1).csv
 
+######DNA 损伤修复相关基因集
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/DNA修复基因.txt
