@@ -41,3 +41,6 @@ to vascularization and matrix production across species and diverse pathologies�
 
 ####同源重组的筛选结果 存为
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/GenomeRNAi_v17_GR00236-A-1.txt
+
+####小鼠单细胞数据，各种细胞类型中，衰老过程中显著上升的基因 文章Mouse aging cell atlas analysis reveals global and cell type-specific aging signatures
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/elife-62293-supp2-v2.xlsx
