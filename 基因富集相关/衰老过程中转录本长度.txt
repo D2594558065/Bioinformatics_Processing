@@ -1,0 +1,102 @@
+
+library(biomaRt)
+
+# 选择Ensembl数据库和小鼠数据集
+mouse <- useMart("ensembl", dataset = "mmusculus_gene_ensembl")
+
+# 获取转录本ID和长度信息
+tx_info <- getBM(attributes = c("ensembl_transcript_id", "external_gene_name", "transcript_length"),
+                 mart = mouse)
+
+# 假设你的数据框是 tx_info
+tx_median <- tx_info %>%
+  group_by(external_gene_name) %>%
+  summarise(median_tx_length = median(transcript_length, na.rm = TRUE)) %>%
+  arrange(desc(median_tx_length))
+
+head(tx_median, 10)  # 查看前 10 个
+
+
+
+
+df <- read.table("/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/matrix/combined.count",header = TRUE)
+
+df1 <- df[,c(1,7:24)]
+
+rownames(df1) <- df1$Geneid 
+
+df1 <- df1[,-1]
+
+#############*************************************************######################
+###########################E10##############################################################
+df_E10 <- df1[,1:6]
+# df_E10 <- df_E10[rowMeans(df_E10) >= 10, ]
+
+df <- read.table("/home/mnt1/wanghao/project/help/XY甲基化/RNA-seq/matrix/combinedH9.count",header = TRUE)
+
+df1 <- df[,c(1,7:12)]
+
+rownames(df1) <- df1$Geneid 
+
+df_H9 <- df1[,-1]
+
+df_combined <- cbind(df_E10,df_H9)
+
+library(DESeq2)
+condition <- factor(c(rep("high",3),rep("low",3),rep("high",3),rep("low",3)),
+                         levels = c("high","low"))
+
+
+df2 <- df_combined[!apply(is.na(df_combined), 1, any), ]
+
+colData <- data.frame(row.names = colnames(df2),condition)
+
+dds <- DESeqDataSetFromMatrix(df2,colData,design = ~condition)
+dds <- DESeq(dds)
+
+
+
+#####进行差异比较分析
+HvsL <- as.data.frame(results(dds, c("condition", "high", "low")))
+
+
+
+
+combined <- HvsL
+
+combined$ENS <- str_replace(rownames(combined), "\\..*$", "")
+
+
+
+library(clusterProfiler)
+library(org.Mm.eg.db)
+
+
+gene_list <- bitr(combined$ENS, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = org.Mm.eg.db)   
+
+resultG <- combined  %>% 
+    inner_join(gene_list,c("ENS" = "ENSEMBL"))
+
+
+drawdata <- resultG %>%
+  inner_join(tx_median,by=c("SYMBOL" = "external_gene_name"))
+ 
+
+
+
+drawdata1 <- drawdata[which(drawdata$padj<=0.05 & abs(drawdata$log2FoldChange)>=0.6),]
+
+
+drawdata1_grouped <- drawdata1 %>%
+  mutate(group = ifelse(log2FoldChange > 0, "UP", "DOWN"))
+
+
+# 2. 箱线图
+ggplot(drawdata1_grouped, aes(x = group, y = median_tx_length, fill = group)) +
+  geom_boxplot(outlier.shape = NA) +  # 不显示异常值
+  geom_jitter(width = 0.2, alpha = 0.3) +  # 添加散点
+  theme_minimal() +
+  labs(x = "Group", y = "Median Transcript Length", title = "Transcript Length in UP vs DOWN Genes") +
+  scale_fill_manual(values = c("UP" = "#E64B35", "DOWN" = "#4DBBD5")) +
+  stat_compare_means(method = "wilcox.test", label.y = max(drawdata1_grouped$median_tx_length, na.rm = TRUE) * 0.95)
+
