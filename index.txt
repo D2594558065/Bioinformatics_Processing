@@ -8,6 +8,9 @@
 #####抹香鲸WGBS bismark index
 /home/mnt1/wanghao/project/index/BisMark/sperm
 
+####小抹香鲸bowtie2_index
+/home/mnt1/wanghao/project/Whale_IPS/IPS/Pygmy_sperm_whale/bowtie2_index
+
 ####Salmon索引 转录本
 ##裸鼹鼠 GCF_000247695.1_HetGla_female_1.0
 /home/mnt1/wanghao/project/index/Salmon/NMR_index
