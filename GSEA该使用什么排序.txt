@@ -1,0 +1,4 @@
+https://www.biostars.org/p/9585611/
+
+至于选择最佳有符号度量——目前尚无统一的共识，人们使用不同的度量。一般来说，结果应该非常相似。
+也就是说，如果 logFC 表示 DESEq2 收缩后的 logFC 估计值，它应该是一个相当不错的度量。你也可以尝试有符号 logPval，即 log(pvalue) * sign(logFC)。
