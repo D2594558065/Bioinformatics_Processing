@@ -1,3 +1,26 @@
+######################如果没有gaf文件
+可以照着以下操作在BioMart下载
+
+✅ 方法二：使用 Ensembl 的注释（如 GTF + homology-based GO）
+Ensembl 对裸鼹鼠提供了基因组注释（版本如 Heterocephalus_glaber_hg38）。可以通过 Ensembl BioMart 获取GO注释：
+
+📍 Ensembl BioMart 操作步骤：
+打开：https://www.ensembl.org/biomart/martview/
+
+选择数据库：Ensembl Genes
+
+选择物种：Heterocephalus glaber
+
+点击【Attributes】，选择：
+
+Gene stable ID
+
+GO Term Accession
+
+GO Term Name
+
+点击【Results】导出为 TSV/CSV 文件
+
 #####通过gaf文件进行非模式物种的GSEA
 library(GO.db)
 library(clusterProfiler)
