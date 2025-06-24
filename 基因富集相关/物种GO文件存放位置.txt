@@ -1,2 +1,2 @@
 #####裸鼹鼠
-/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/NMR_GO.txt
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/NMR_GO.tab
