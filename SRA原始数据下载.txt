@@ -1,0 +1,6 @@
+
+###在 screen -r chr1 后台下载数据
+conda activate prefetch
+
+#批量下载
+prefetch --option-file ranids.txt
