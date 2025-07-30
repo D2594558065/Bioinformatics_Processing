@@ -1,0 +1,2 @@
+##该篇文章讲诉edger 加上 limma 如何进行差异表达分析 十分值得观看
+https://bioconductor.org/packages/release/workflows/vignettes/RNAseq123/inst/doc/limmaWorkflow.html
