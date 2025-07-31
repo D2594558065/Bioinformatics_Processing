@@ -4,3 +4,15 @@ conda activate prefetch
 
 #批量下载
 prefetch --option-file ranids.txt
+
+for i in */*.sra; do
+    # 从SRA格式转换成FASTQ格式
+    fastq-dump --split-3 $i
+
+    # 构建FASTQ文件名
+    base_name=$(basename $i .sra)
+
+    # 质量控制
+    trim_galore -j 4 -q 25 --stringency 3 --length 20 -e 0.1 --paired ${base_name}_1.fastq ${base_name}_2.fastq --gzip -o ../trimgaloreData
+done
+
