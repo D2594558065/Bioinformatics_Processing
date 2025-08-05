@@ -1,0 +1,111 @@
+CIBERSORT流程
+####
+#########################去卷积分析
+setwd("/home/mnt1/wanghao/project/help/XY_DOX/rowdata/MJ20240822392-MJ-R-20240905082-徐晓钰-真核转录组纯测序-15个样本/Cibersort")
+source('Cibersort.R')
+
+df <- read.table("/home/mnt1/wanghao/project/help/CY_WK/matrix/combined.count",header = TRUE)
+
+df1 <- df[,c(1,7:20)]
+
+rownames(df1) <- df1$Geneid 
+
+df1 <- df1[,-1]
+
+# 按表型顺序排序列
+phenos <- sub(".*\\.(WT|H|HD).*", "\\1", colnames(df1))
+df1 <- df1[, order(phenos)]
+
+df2 <- df1[,-c(3,4,5,6,7,9,13,14)]
+
+df2$Length <- df$Length
+
+rpk <- df2[, -7] / (df2$Length / 1000)  # 除去 Length 列，计算每个样本的 RPK
+# 计算每个样本的总 RPK
+total_rpk <- colSums(rpk)
+
+# 计算 TPM
+tpm <- sweep(rpk, 2, total_rpk, "/") * 1e6  # 按列（样本）标准化，总 RPK 归一化到百万
+
+
+######将基因名转化为Symbol
+library(clusterProfiler)
+library(org.Mm.eg.db)
+
+tpm$ENS <- str_replace(rownames(tpm), "\\..*$", "")
+
+
+gene_list <- bitr(tpm$ENS, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = org.Mm.eg.db)   
+
+tpm_matrix <-  tpm  %>% 
+  inner_join(gene_list,c("ENS" = "ENSEMBL"))
+
+tpm_matrix  <- tpm_matrix[!duplicated(tpm_matrix$SYMBOL), ]
+
+rownames(tpm_matrix) <- tpm_matrix$SYMBOL
+
+tpm_final <- tpm_matrix[,c(1:6)]
+colnames(tpm_final) <- c("H_684","H_854","HD_474","HD_462","WT_5","WT_7")
+
+write.table(
+  tpm_final,                     # 数据框
+  file = "/home/mnt1/wanghao/project/help/CY_WK/CIBERSORT/HD_tpm.txt",    # 输出文件名
+  sep = "\t",             # 指定分隔符为 Tab
+  row.names = TRUE,       # 保留行名
+  col.names = TRUE,       # 保留列名
+  quote = FALSE           # 不对字符数据加引号
+)
+
+
+#########小鼠的皮肤特征矩阵
+
+skin <- read.csv("/home/mnt1/wanghao/project/help/XY_DOX/rowdata/MJ20240822392-MJ-R-20240905082-徐晓钰-真核转录组纯测序-15个样本/Cibersort/O_skin_mouse.csv",header = TRUE,sep = "\t")
+
+skin$Signature_genes <- str_replace(skin$Signature_genes, "\\..*$", "")
+library(clusterProfiler)
+library(org.Hs.eg.db)
+gene_list <- bitr(skin$Signature_genes, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = org.Hs.eg.db)   
+
+
+skin_human <-  skin  %>% 
+  inner_join(gene_list,c("Signature_genes" = "ENSEMBL"))
+
+###读取同源基因转换列表
+human2mouse <- read.csv("mouse2human.txt",sep = "\t")
+human2mouse <- human2mouse[!duplicated(human2mouse[, c("Symbol_x", "Symbol")]), ]  %>% 
+  dplyr::select(Symbol_x,Symbol)
+
+skin_mouse <- skin_human  %>% 
+  inner_join(human2mouse,c("SYMBOL" = "Symbol"))
+
+rownames(skin_mouse) <- skin_mouse$Symbol_x
+
+skin_mouse1 <- skin_mouse[,c(2:7)]
+#####存为txt文件
+# 假设您的数据框名为 df
+# write.table(
+#   skin_mouse1,                     # 数据框
+#   file = "mouse_skin_sig.txt",    # 输出文件名
+#   sep = "\t",             # 指定分隔符为 Tab
+#   row.names = TRUE,       # 保留行名
+#   col.names = TRUE,       # 保留列名
+#   quote = FALSE           # 不对字符数据加引号
+# )
+
+
+result1 <- CIBERSORT("mouse_skin_sig.txt","DOX_skin_tpm.txt", perm = 1000, QN = T)  #perm置换次数=1000，QN分位数归一化=TRUE
+
+#####绘制热图
+library(pheatmap)
+p1 <- pheatmap(t(result1[,c(1:6)]), 
+         scale  = "row",
+         color = colorRampPalette(c("blue", "white", "red"))(50), 
+         main = "Skin cell composition",
+         cluster_rows = TRUE,
+         cluster_cols = FALSE)
+
+ggsave(filename = "/home/mnt1/wanghao/project/help/XY_DOX/rowdata/MJ20240822392-MJ-R-20240905082-徐晓钰-真核转录组纯测序-15个样本/plot/skin_celltype.pdf", plot = p1, device = "pdf", width = 6, height = 6)
+
+
+
+
