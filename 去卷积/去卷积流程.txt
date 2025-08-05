@@ -109,3 +109,62 @@ ggsave(filename = "/home/mnt1/wanghao/project/help/XY_DOX/rowdata/MJ20240822392-
 
 
 
+
+
+##################################immunedeconv  流程
+#####https://github.com/omnideconv/immunedeconv?tab=readme-ov-file  参考这个网址
+#########################去卷积分析
+setwd("/home/mnt1/wanghao/project/help/XY_DOX/rowdata/MJ20240822392-MJ-R-20240905082-徐晓钰-真核转录组纯测序-15个样本/Cibersort")
+source('Cibersort.R')
+
+df <- read.table("/home/mnt1/wanghao/project/help/CY_WK/matrix/combined.count",header = TRUE)
+
+df1 <- df[,c(1,7:20)]
+
+rownames(df1) <- df1$Geneid 
+
+df1 <- df1[,-1]
+
+# 按表型顺序排序列
+phenos <- sub(".*\\.(WT|H|HD).*", "\\1", colnames(df1))
+df1 <- df1[, order(phenos)]
+
+df2 <- df1[,-c(3,4,5,6,7,9,13,14)]
+
+df2$Length <- df$Length
+
+rpk <- df2[, -7] / (df2$Length / 1000)  # 除去 Length 列，计算每个样本的 RPK
+# 计算每个样本的总 RPK
+total_rpk <- colSums(rpk)
+
+# 计算 TPM
+tpm <- sweep(rpk, 2, total_rpk, "/") * 1e6  # 按列（样本）标准化，总 RPK 归一化到百万
+
+
+######将基因名转化为Symbol
+library(clusterProfiler)
+library(org.Mm.eg.db)
+
+tpm$ENS <- str_replace(rownames(tpm), "\\..*$", "")
+
+
+gene_list <- bitr(tpm$ENS, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = org.Mm.eg.db)   
+
+tpm_matrix <-  tpm  %>% 
+  inner_join(gene_list,c("ENS" = "ENSEMBL"))
+
+tpm_matrix  <- tpm_matrix[!duplicated(tpm_matrix$SYMBOL), ]
+
+rownames(tpm_matrix) <- tpm_matrix$SYMBOL
+
+tpm_final <- tpm_matrix[,c(1:6)]
+colnames(tpm_final) <- c("H_684","H_854","HD_474","HD_462","WT_5","WT_7")
+
+
+
+library(immunedeconv)
+out<-immunedeconv::deconvolute_mouse(tpm_final, "mmcp_counter")
+
+
+
+
