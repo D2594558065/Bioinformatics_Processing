@@ -1,0 +1,63 @@
+################GSVA  参考https://zhuanlan.zhihu.com/p/518145829  网址
+#*****************************************************************************************************
+library(stringr)
+
+df <- read.table("/home/mnt1/wanghao/project/help/CY_WK/matrix/combined.count",header = TRUE)
+
+df1 <- df[,c(1,7:20)]
+
+rownames(df1) <- df1$Geneid 
+
+df1 <- df1[,-1]
+
+df1 <- df1[rowMeans(df1) >= 10, ]
+# 按表型顺序排序列
+phenos <- sub(".*\\.(WT|H|HD).*", "\\1", colnames(df1))
+df1 <- df1[, order(phenos)]
+
+df2 <- df1[,-c(3,4,5,6,7,9,13,14)]
+
+library(edgeR)
+
+dat <- as.matrix(log2(edgeR::cpm(df2))+1)
+
+dat<- as.data.frame(dat)
+
+dat$ENS <- str_replace(rownames(dat), "\\..*$", "")
+
+
+
+library(clusterProfiler)
+library(org.Mm.eg.db)
+
+gene_list <- bitr(dat$ENS, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = org.Mm.eg.db)   
+
+resultG <- dat %>%
+  inner_join(gene_list, by = c("ENS" = "ENSEMBL")) %>%
+  distinct(SYMBOL, .keep_all = TRUE)
+
+rownames(resultG) <- resultG$SYMBOL
+
+
+resultG1 <- as.matrix(resultG[,-c(7,8)])
+
+library(gggsea)
+library(msigdbr)
+GO_df_all <- msigdbr(species = "Mus musculus",
+                     category = "C5")  
+GO_df <- dplyr::select(GO_df_all, gs_name, gene_symbol, gs_exact_source, gs_subcat) 
+GO_df <- GO_df[GO_df$gs_subcat == "GO:BP",]
+go_list <- split(GO_df$gene_symbol, GO_df$gs_name) ##按照gs_name给gene_symbol分组
+
+
+library(GSVA) 
+
+
+
+gsva_mat <- gsva(expr=resultG1, 
+               gset.idx.list=go_list,
+               kcdf="Gaussian" ,#"Gaussian" for logCPM,logRPKM,logTPM, "Poisson" for counts
+               verbose=T, 
+               parallel.sz = parallel::detectCores())#调用所有核
+
+
