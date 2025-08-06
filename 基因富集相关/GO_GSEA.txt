@@ -1,0 +1,35 @@
+library(msigdbr)
+GO_df_all <- msigdbr(species = "Mus musculus",
+                     category = "C5")  
+GO_df <- dplyr::select(GO_df_all, gs_name, gene_symbol, gs_exact_source, gs_subcat)
+GO_df <- GO_df[GO_df$gs_subcat!="HPO",]
+go_list <- split(GO_df$gene_symbol, GO_df$gs_name) ##按照gs_name给gene_symbol分组
+
+
+######G8
+library(msigdbr)
+GO_df_all <- msigdbr(species = "Mus musculus",
+                     category = "C2")  
+GO_df <- dplyr::select(GO_df_all,gs_name, gene_symbol)
+GO_df <- GO_df
+go_list <- split(GO_df$gene_symbol, GO_df$gs_name) ##按照gs_name给gene_symbol分组
+
+combined <- HvsL
+
+library(clusterProfiler)
+library(org.Mm.eg.db)
+combined$ENS <- str_replace(rownames(combined), "\\..*$", "")
+gene_list <- bitr(combined$ENS, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = org.Mm.eg.db)   
+
+resultG <- combined  %>% 
+    inner_join(gene_list,c("ENS" = "ENSEMBL"))%>% 
+    arrange(-log2FoldChange) %>%
+    distinct(SYMBOL, .keep_all = TRUE)
+
+geneList = resultG$log2FoldChange #把foldchange按照从大到小提取出来
+names(geneList) <- resultG$SYMBOL #给上面提取的foldchange加上对应上ENTREZID
+geneList <- geneList[is.finite(geneList)]
+
+gsea <- fgsea::fgsea(go_list, geneList, nperm=20000)
+
+
