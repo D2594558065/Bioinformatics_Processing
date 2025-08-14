@@ -10,8 +10,28 @@
 ###抹香鲸bowtie2_index
 /home/mnt1/wanghao/project/index/bowtie2/spermWhale
 
+#########################################################################################
 ####小抹香鲸bowtie2_index
 /home/mnt1/wanghao/project/Whale_IPS/IPS/Pygmy_sperm_whale/bowtie2_index
+
+
+****************
+*****************小抹香鲸bismark(WGBS)index
+####进行比对conda activate WGBS
+####首先是构建索引 创建索引文件夹
+mkdir /home/mnt1/wanghao/project/index/BisMark/pygmy
+
+ln -s /home/mnt1/wanghao/project/Whale_IPS/IPS/Pygmy_sperm_whale/genome/GCF_026419965.1_mKogBre1_haplotype_1_genomic.fna /home/mnt1/wanghao/project/index/BisMark/pygmy
+# build index
+bismark_genome_preparation \
+        --bowtie2 \
+        --parallel 4 \
+        /home/mnt1/wanghao/project/index/BisMark/pygmy 1>std.out 2>err.out
+*******************************************************************************
+
+
+
+#######################################################################################
 
 
 
