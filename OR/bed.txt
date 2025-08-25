@@ -1,0 +1,2 @@
+##人类hg38 OR bed 文件
+/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/hg38OR.bed
