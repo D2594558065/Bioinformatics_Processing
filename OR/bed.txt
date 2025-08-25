@@ -1,2 +1,4 @@
 ##人类hg38 OR bed 文件
 /home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/ORcluster/ORgeneLocation/gtf/hg38OR.bed
+###人类GRCH38 L1.bed
+/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/cactus241way/bw/L1.bed
