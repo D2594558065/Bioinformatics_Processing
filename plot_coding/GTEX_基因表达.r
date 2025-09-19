@@ -14,8 +14,7 @@ dath <- read.csv("GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt",sep = '\
 # 假设您的数据框名为df，第一列名为V1
 
 ##########
-df1 <-  data[grepl("^OR\\d+[A-Za-z]", data$Description), ]
-
+df1 <-  data[data$Description %in% c("POU5F1","TP53"),]
 df1 <- data.frame(df1)
 df1 <- df1[!duplicated(df1$Description), ]
 rownames(df1) <- df1$Description
@@ -36,55 +35,44 @@ dath$age <- age
 df4 <- df3  %>% 
   inner_join(dath,'SUBJID') 
 
-# First, identify the columns that contain gene expression data
-gene_expression_columns <- grep("^OR", names(df4), value = TRUE)
-
-library(tidyr)
-# 将基因表达数据转换为长格式
-df_long <- df4 %>%
-  pivot_longer(cols = gene_expression_columns, names_to = "Gene", values_to = "Expression")
-
-# 按组织类型（假设为"SMTS"列）和基因分组，计算平均表达量
-average_expression <- df_long %>%
-  group_by(SMTS, Gene) %>%
-  summarize(AverageExpression = mean(Expression, na.rm = TRUE)) %>%
-  ungroup()
-
-# 按组织类型和平均表达量排序
-sorted_expression <- average_expression %>%
-  arrange(desc(AverageExpression))
-
-# 查看排序后的结果
-print(sorted_expression)
-
- 
-sorted_expression[which(sorted_expression$Gene == "OR52B2"),]
-
-df <- sorted_expression  %>% 
-    filter(Gene == "OR51E2" )
-
+df <- df4[df4$SEX == 1,]
 library(ggplot2)
 
-df_sorted <- df[order(-df$AverageExpression), ]
+# 假设你的数据框叫 df
+# AGE 是字符型（比如 "60-69"），先确保它是因子并排序
+df$AGE <- factor(df$AGE, levels = sort(unique(df$AGE)))
 
-# 只选择前10个条目用于绘图
-df_top10 <- df_sorted[1:15, ]
 
 library(ggplot2)
+library(ggpubr)
 
-p <- ggplot(df_top10, aes(x = reorder(SMTS, -AverageExpression), y = AverageExpression, fill = SMTS)) + 
-  geom_bar(stat = "identity") + 
-  theme_minimal() +
-  theme(
-    text = element_text( size = 18, face = "bold"),  # 字体设置
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    panel.border = element_rect(color = "black", fill = NA, size = 1),  # 黑色边框
-    panel.background = element_blank()  # 移除默认背景
-  ) +
+# 确保 AGE 是因子
+df$AGE <- as.factor(df$AGE)
+
+p <- ggplot(df, aes(x = .data$AGE, y = .data$POU5F1, fill = .data$AGE)) +
+  geom_boxplot(outlier.size = 0.8, alpha = 0.7) +
+  facet_wrap(~SMTS, scales = "free_y") +
+  theme_bw() +
   labs(
-    title = "OR51E2 Expression in Different Tissues",
-    x = "SMTS", 
-    y = "Average Expression", 
-    fill = "SMTS"
+    title = "POU5F1 expression ",
+    x = "Age group",
+    y = "POU5F1 expression"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  # 添加方差分析 (ANOVA) 结果
+  stat_compare_means(
+    method = "anova",
+    label = "p.format",
   )
-ggsave(filename = "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/plot/OR51E2_expression.pdf", plot = p, device = "pdf", width = 8, height = 8)
+
+print(p)
+
+
+# ggsave(filename = "/home/mnt1/wanghao/project/help/ZYX/plot/OCT4_male.pdf", plot = p, device = "pdf", width = 8, height = 14)
+ggsave(filename = "/home/mnt1/wanghao/project/help/ZYX/plot/OCT4_female.pdf", plot = p, device = "pdf", width =12, height = 14)
+
+
+
