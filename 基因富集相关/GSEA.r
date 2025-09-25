@@ -29,7 +29,7 @@ names(geneList) <- rnk$V1 #给上面提取的foldchange加上对应上ENTREZID
 
 geneList <- na.omit(geneList)
 gsea <- fgsea::fgsea(genes_list_by_term, geneList, nperm=1000)
-# df2 <- gseaCurve(geneList, genes_list_by_term, gsea)
+df2 <- gseaCurve(geneList, genes_list_by_term, gsea)
 
 
 ggplot2::ggplot() + 
