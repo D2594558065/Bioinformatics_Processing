@@ -1,0 +1,42 @@
+######人类
+/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/RNA_seq/TEcount/STAR_out
+###进行TECOUNT的比对
+screen -r ORNA
+
+for i in `cat sample.txt`;
+do     STAR --genomeDir /home/mnt1/wanghao/project/STAR_GRCH38_index \
+         --runThreadN 12 \
+         --readFilesIn ${i}_R1_000_val_1.fq.gz ${i}_R2_000_val_2.fq.gz \
+         --readFilesCommand zcat \
+         --outFileNamePrefix /home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/RNA_seq/TEcount/STAR_out/${i} \
+         --outSAMtype BAM SortedByCoordinate \
+         --outBAMsortingThreadN 10 \
+         --outFilterMultimapNmax 100 \
+         --winAnchorMultimapNmax 100 ;
+done
+
+######TEcount 计算，修改为多线程
+#!/bin/bash
+# 定义一个函数来运行TEcount
+run_tecount() {
+  local bam_file=$1
+  sample_name=$(basename $bam_file .bam)
+  outdir=/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/RNA_seq/TEcount/TEcountOut/${sample_name}
+  mkdir -p $outdir
+
+  TEcount -b $bam_file --sortByPos --format BAM --mode multi \
+          --GTF /home/mnt1/wanghao/project/GRCH38.p13.gtf/gencode.v43.chr_patch_hapl_scaff.annotation.gtf \
+          --TE /home/mnt1/wanghao/project/help/XN_ZBP1/ZBP1_RIP-seq/TE_gtf/GRCh38_GENCODE_rmsk_TE.gtf \
+          --outdir $outdir
+}
+
+export -f run_tecount
+
+# 使用GNU Parallel并行运行TEcount，限制最大并行任务数为6
+parallel -j 10 run_tecount ::: *.bam
+
+echo "All TEcount tasks are completed."
+
+
+
+#########################小鼠
