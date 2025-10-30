@@ -1,3 +1,9 @@
+#########gaf 下载网址
+https://current.geneontology.org/products/pages/downloads.html
+
+
+
+
 ######################如果没有gaf文件
 #####通过gaf文件进行非模式物种的GSEA
 library(GO.db)
