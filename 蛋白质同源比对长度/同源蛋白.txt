@@ -1,0 +1,5 @@
+###根据这个网站点击同源蛋白
+https://www.ncbi.nlm.nih.gov/protein/?term=SUMO1+naked+mole-rat 
+
+###点击进去可以选择不同物种的同源蛋白
+然后点击protein alignment 可以得到不同物种的蛋白比对
