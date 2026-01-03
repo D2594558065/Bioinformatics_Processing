@@ -2,6 +2,10 @@
 ##来源自文章A new gene set identifies senescent cells and predicts senescence-associated pathways across tissues
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/SAUL_SEN_MAYO.txt
 
+#####小鼠SASP基因集REACTOME_SENESCENCE_ASSOCIATED_SECRETORY_PHENOTYPE_SASP  
+###来源自https://www.gsea-msigdb.org/gsea/msigdb/mouse/geneset/REACTOME_SENESCENCE_ASSOCIATED_SECRETORY_PHENOTYPE_SASP.html
+/home/mnt1/wanghao/project/LINE1_evolution/汇总信息/REACTOME_SENESCENCE_ASSOCIATED_SECRETORY_PHENOTYPE_SASP.v2025.1.Mm.gmt
+
 ####小鼠agingclock gene  源自Aging Fly Cell Atlas identifies exhaustive aging features at cellular resolution
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/mouse_aging_clock.txt
 
