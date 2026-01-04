@@ -33,7 +33,7 @@ vim /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/REACTOME_EPIGENETIC_
 #####CoreScence  核心衰老基因集 人鼠通用Single-cell and spatial detection of senescent cells using DeepScence 文章
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/CoreScence.txt
 
-#####干细胞预先衰老使用的基因集(其中包括复制性衰老 预衰老数据集) 文章参考自Nuclear RNA homeostasis promotes systems-level coordination of cell fate and senescence
+#####干细胞预先衰老使用的基因集(其中包括复制性衰老 预衰老数据集 SASP 其中的SASP是经过文章自己挑选的) 文章参考自Nuclear RNA homeostasis promotes systems-level coordination of cell fate and senescence
 /home/mnt1/wanghao/project/LINE1_evolution/汇总信息/Senescence-early.csv
 
 ######Sensig 基因集 是在小鼠体内的衰老特征(也可用于人) 筛选标准是padj<=0.05 1803个基因
