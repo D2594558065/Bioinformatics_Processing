@@ -1,0 +1,4 @@
+###参考https://www.jianshu.com/p/a1496b58b9c7 这个教程
+
+##首先打开文件->首选项->设置->  然后搜索Rpath 切换为想要设置的R版本
+然后继续搜索r.rterm.option  切换为想要的R版本
