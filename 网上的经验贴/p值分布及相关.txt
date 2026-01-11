@@ -1,0 +1,2 @@
+#####讲诉了在DEseq2 假设检验下p值的分布 以及矫正错误
+https://divingintogeneticsandgenomics.com/post/downstream-of-bulk-rnaseq-read-in-salmon-output-using-tximport-and-then-deseq2/
