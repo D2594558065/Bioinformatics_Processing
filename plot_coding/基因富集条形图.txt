@@ -1,0 +1,63 @@
+plot_GO_bar <- function(
+  go_data,        # 数据框，必须包含 Description 和 p.adjust 列
+  top_n = 10,     # 取前 N 条 GO term
+  bar_fill = "#BCDEAC",  # 条形颜色
+  plot_title = "GO Pathway enrichment",
+  y_label = "Gene Set",
+  width = 0.8,    # 条形宽度
+  title_size = 8, # 标题字号
+  text_wrap_width = NULL  # 可选：对 Description 换行
+) {
+  
+  # 可选：对 Description 换行
+  if (!is.null(text_wrap_width)) {
+    go_data$Description <- str_wrap(go_data$Description, width = text_wrap_width)
+  }
+  
+  # 保持顺序并选择前 top_n 条
+  plot_data <- go_data %>%
+    mutate(
+      Description = factor(Description, levels = Description)
+    )
+  
+  # 绘图
+  p <- ggplot(plot_data, aes(x = -log10(p.adjust), y = rev(Description))) +
+    geom_bar(stat = "identity", width = width, fill = bar_fill) +
+    geom_text(aes(x = 0.1, label = Description), size = 2, hjust = 0) +
+    theme_classic() +
+    theme(
+      plot.title = element_text(size = title_size),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.title.y = element_text(colour = 'black', size = 8),
+      axis.line = element_line(colour = 'black', linewidth = 0.5),
+      axis.text.x = element_text(colour = 'black', size = 6),
+      axis.ticks.x = element_line(colour = 'black'),
+      axis.title.x = element_text(colour = 'black', size = 8),
+      legend.position = "none"
+    ) +
+    scale_x_continuous(expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0.1, 0)) +
+    labs(
+      title = plot_title,
+      y = y_label,
+      x = expression(-log[10](adjusted~p))
+    )
+  
+  return(p)
+}
+
+# 绘图
+p <- plot_GO_bar(
+  go_data = as.data.frame(res_nPD_vs_Saline_up_GO)[1:10,],
+  top_n = 10,
+  bar_fill = "#D26F74",
+  plot_title = "Go pathway enrichment",
+  y_label = "Enriched GO terms",
+  width = 0.8,
+  title_size = 8,
+  text_wrap_width = 40
+)
+
+ggsave(filename = "/home/mnt1/wanghao/project/help/WXH/project1/plot/res_nPD_vs_Saline_up_GO.pdf", plot = p, device = "pdf", width = 2.1, height = 2.6)
+
