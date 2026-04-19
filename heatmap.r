@@ -83,3 +83,44 @@ ggsave(filename = "/home/mnt1/wanghao/project/help/XY_DOX/rowdata/MJ20240822392-
 
 ggsave(filename = "/home/mnt1/wanghao/project/LINE1_evolution/OR_receptor/LINE1_OR_Data/bulk-RNA/Lung/GSE57148/lungheat.pdf", plot = p, device = "pdf", width = 5, height = 10,limitsize = FALSE)
 
+
+
+
+#####分组柱状图
+drawdata <- norm_counts_data_frame[which(norm_counts_data_frame$SYMBOL %in% genes),]
+
+sample_group <- c(
+  "PC_IR", "PC_IR", "PC_IR",
+  "DE_IR", "DE_IR", "DE_IR",
+  "WT_IR", "WT_IR", "WT_IR"
+)
+
+sample_group <- factor(sample_group, levels = c("PC_IR", "DE_IR", "WT_IR"))
+
+rownames(drawdata) <- drawdata$SYMBOL
+drawdata1 <- drawdata[,c(1:9)]
+library(ComplexHeatmap)
+
+colnames(drawdata1) <- c("PC_IR_rep1","PC_IR_rep2","PC_IR_rep3",
+                         "DE_IR_rep1", "DE_IR_rep2", "DE_IR_rep3",
+                         "WT_IR_rep1", "WT_IR_rep2", "WT_IR_rep3")
+
+annotation_col <- data.frame(Group = sample_group)
+rownames(annotation_col) <- colnames(drawdata1)
+
+
+library(pheatmap)
+p <- pheatmap(
+  drawdata1,
+  scale = "row",
+  cluster_cols = FALSE,
+  annotation_col = annotation_col,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  angle_col = 45,
+  fontsize_col = 6,
+  fontsize_row = 6,
+  fontsize = 6,
+  gaps_col = c(3, 6) #这个参数设置的是再第几列后面断开
+)
+
