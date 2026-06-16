@@ -17,3 +17,6 @@
 conda activate R3
 再运行radian  
 
+切换到 Monocle2
+conda activate Monocle2
+再运行radian 
