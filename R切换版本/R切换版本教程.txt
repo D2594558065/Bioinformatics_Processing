@@ -20,3 +20,6 @@ conda activate R3
 切换到 Monocle2
 conda activate Monocle2
 再运行radian 
+
+
+https://zhuanlan.zhihu.com/p/32368280035
