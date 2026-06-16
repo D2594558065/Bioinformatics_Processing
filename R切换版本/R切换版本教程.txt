@@ -13,4 +13,7 @@
 
 方法二
 ##############切换R版本 直接在R安装环境里面安装radian   再运行下面的路径 便可以调出调试台
-/home/mnt1/wanghao/miniconda3/envs/R3/bin/radian  
+应该先切换到R3 环境
+conda activate R3
+再运行radian  
+
