@@ -23,7 +23,7 @@ plot_GO_bar <- function(
   # 绘图
   p <- ggplot(plot_data, aes(x = -log10(p.adjust), y = rev(Description))) +
     geom_bar(stat = "identity", width = width, fill = bar_fill) +
-    geom_text(aes(x = 0.1, label = Description), size = 2, hjust = 0， lineheight = 0.7) +
+    geom_text(aes(x = 0.1, label = Description), size = 2, hjust = 0, lineheight = 0.7) +
     theme_classic() +
     theme(
       plot.title = element_text(size = title_size),
