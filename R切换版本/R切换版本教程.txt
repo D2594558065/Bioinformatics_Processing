@@ -62,3 +62,13 @@ conda activate R443
 
     "r.bracketedPaste": true
 }
+
+
+#####最原始的设置 恢复到R1
+{
+    "r.rpath.linux": "/home/mnt1/wanghao/miniconda3/envs/R1/bin/R",
+    "r.rterm.option": [
+        "--r-binary=/home/mnt1/wanghao/miniconda3/envs/R1/bin/R"
+    ],
+    "r.rterm.linux": "/home/mnt1/wanghao/miniconda3/envs/R1/bin/radian"
+}
