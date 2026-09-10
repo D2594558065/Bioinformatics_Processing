@@ -23,3 +23,42 @@ conda activate Monocle2
 
 
 https://zhuanlan.zhihu.com/p/32368280035
+
+
+
+
+##########################验证可行版本
+环境名：R443
+R版本：4.4.3
+
+conda create -n R443 \
+  -c conda-forge \
+  --strict-channel-priority \
+  r-base=4.4.3 \
+  python=3.11 \
+  pip \
+  -y
+
+conda activate R443
+
+
+###ctr + shift + p   Preferences: Open Remote Settings
+/home/mnt1/wanghao/miniconda3/envs/R443/bin/python \
+  -m pip install --no-cache-dir radian
+
+{
+    "r.rpath.linux": "/home/mnt1/wanghao/miniconda3/envs/R443/bin/R",
+
+    "r.rterm.linux": "/home/mnt1/wanghao/miniconda3/envs/R443/bin/radian",
+
+    "r.rterm.option": [
+        "--r-binary=/home/mnt1/wanghao/miniconda3/envs/R443/bin/R"
+    ],
+
+    "terminal.integrated.env.linux": {
+        "R_HOME": "/home/mnt1/wanghao/miniconda3/envs/R443/lib/R",
+        "PATH": "/home/mnt1/wanghao/miniconda3/envs/R443/bin:${env:PATH}"
+    },
+
+    "r.bracketedPaste": true
+}
